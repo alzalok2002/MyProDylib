@@ -1,0 +1,9 @@
+Package: com.mohammed.promenu
+Name: PRO_MENU_MOHAMMED
+Depends: mobilesubstrate
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: My Private Dylib for PUBG
+Maintainer: Mohammed
+Author: Mohammed
+Section: Tweaks

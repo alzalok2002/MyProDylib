@@ -25,10 +25,12 @@ jobs:
         run: |
           export THEOS=~/theos
           make FINALPACKAGE=1
-          
+          # أمر سحري: انسخ أي ملف dylib للمجلد الرئيسي عشان السيرفر يشوفه
+          find .theos/obj -name "*.dylib" -exec cp {} . \;
+
       - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
-          name: Mohammed_Dylib
-          # التعديل هنا: خليه يبحث في كل مكان عن ملف dylib
-          path: "**/*.dylib"
+          name: Mohammed_Dylib_Final
+          # توة المسار صار في المجلد الرئيسي مباشرة
+          path: "./*.dylib"

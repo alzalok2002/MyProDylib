@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-// واجهة المنيو
+// تعريف واجهة المنيو
 @interface MyMenuV : UIView
 @property (nonatomic, strong) UISwitch *sw1;
 @property (nonatomic, strong) UISwitch *sw2;
@@ -41,46 +41,43 @@
 }
 @end
 
-// كود التحكم في إظهار وإخفاء المنيو
+// كود التحكم
 static MyMenuV *myGlobalMenu;
 
 @interface MenuHandler : NSObject
-+ (void)handleTap;
++ (void)toggleMenu;
 @end
 
 @implementation MenuHandler
-+ (void)handleTap {
++ (void)toggleMenu {
     if (myGlobalMenu) {
         myGlobalMenu.hidden = !myGlobalMenu.hidden;
     }
 }
 @end
 
-// تشغيل التويك عند فتح اللعبة
+// التشغيل التلقائي
 __attribute__((constructor)) static void initialize() {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        UIWindow *keyWindow = nil;
-        if (@available(iOS 13.0, *)) {
-            for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
-                if (scene.activationState == UISceneActivationStateForegroundActive) {
-                    keyWindow = scene.windows.firstObject;
-                    break;
-                }
+        UIWindow *activeWindow = nil;
+        // الطريقة الحديثة للحصول على النافذة في iOS 13+
+        for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+            if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
+                activeWindow = ((UIWindowScene *)scene).windows.firstObject;
+                break;
             }
-        } else {
-            keyWindow = [UIApplication sharedApplication].keyWindow;
         }
 
-        if (keyWindow) {
+        if (activeWindow) {
             myGlobalMenu = [[MyMenuV alloc] initWithFrame:CGRectMake(50, 100, 250, 200)];
-            myGlobalMenu.hidden = YES; // يبدأ مخفي
-            [keyWindow addSubview:myGlobalMenu];
+            myGlobalMenu.hidden = YES;
+            [activeWindow addSubview:myGlobalMenu];
 
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:[MenuHandler class] action:@selector(handleTap)];
-            tap.numberOfTouchesRequired = 3; // 3 أصابع تفتح المنيو
-            [keyWindow addGestureRecognizer:tap];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:[MenuHandler class] action:@selector(toggleMenu)];
+            tap.numberOfTouchesRequired = 3; 
+            [activeWindow addGestureRecognizer:tap];
             
-            NSLog(@"🚀 MOHAMMED MENU LOADED SUCCESSFULLY!");
+            NSLog(@"🚀 MOHAMMED MENU LOADED!");
         }
     });
 }

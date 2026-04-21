@@ -11,7 +11,10 @@ jobs:
 
       - name: Setup Theos
         run: |
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
+          # تحميل الـ Theos مباشرة بدون وسيط
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+          # تحميل الـ SDKs المطلوبة بشكل يدوي
+          git clone --depth 1 https://github.com/theos/sdks.git ~/theos/sdks
           echo "THEOS=~/theos" >> $GITHUB_ENV
 
       - name: Build Dylib

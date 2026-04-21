@@ -7,15 +7,16 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
-        self.layer.cornerRadius = 12;
+        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.9];
+        self.layer.cornerRadius = 15;
+        self.layer.borderWidth = 2;
+        self.layer.borderColor = [UIColor greenColor].CGColor;
         self.clipsToBounds = YES;
-        self.layer.borderWidth = 1;
-        self.layer.borderColor = [UIColor cyanColor].CGColor;
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, 30)];
-        label.text = @"MOHAMMED MENU";
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, frame.size.width, 30)];
+        label.text = @"MOHAMMED PRO MENU";
         label.textColor = [UIColor whiteColor];
+        label.font = [UIFont boldSystemFontOfSize:14];
         label.textAlignment = NSTextAlignmentCenter;
         [self addSubview:label];
     }
@@ -25,10 +26,12 @@
 
 static MyProMenu *mainMenu;
 
-// دالة التشغيل الآمنة
 static void initMenu() {
+    // انتظار 15 ثانية عشان اللعبة تستقر وما تكرش
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         UIWindow *window = nil;
+        
+        // الطريقة الحديثة والوحيدة المقبولة في iOS 15-18
         if (@available(iOS 13.0, *)) {
             for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
                 if (scene.activationState == UISceneActivationStateForegroundActive) {
@@ -36,14 +39,12 @@ static void initMenu() {
                     break;
                 }
             }
-        } else {
-            window = [UIApplication sharedApplication].keyWindow;
         }
 
         if (window && !mainMenu) {
-            mainMenu = [[MyProMenu alloc] initWithFrame:CGRectMake(40, 80, 220, 150)];
+            mainMenu = [[MyProMenu alloc] initWithFrame:CGRectMake(50, 100, 240, 160)];
             [window addSubview:mainMenu];
-            NSLog(@"[MOHAMMED] Menu added successfully!");
+            NSLog(@"[MOHAMMED] Done! Menu is up.");
         }
     });
 }

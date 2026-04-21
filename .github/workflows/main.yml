@@ -9,13 +9,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Theos and SDK
+      - name: Setup Theos
         run: |
-          # مسح أي ملفات قديمة عشان ما يتلبكش السيرفر
           rm -rf ~/theos
-          # تحميل الثيوس بشكل نظيف
           git clone --recursive https://github.com/theos/theos.git ~/theos
-          # تحميل الـ SDKs بطريقة "الضغط" عشان نضمن إنها تنزل كاملة
           mkdir -p ~/theos/sdks
           curl -L https://github.com/theos/sdks/archive/master.tar.gz | tar -xz -C ~/theos/sdks --strip-components=1
           echo "THEOS=~/theos" >> $GITHUB_ENV

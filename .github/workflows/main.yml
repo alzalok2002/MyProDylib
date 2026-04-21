@@ -20,20 +20,18 @@ jobs:
       - name: Install Signing Tools
         run: |
           brew install ldid
-          # إنشاء ملف صلاحيات لضمان عدم الكراش
           echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>get-task-allow</key><true/><key>platform-application</key><true/></dict></plist>' > ent.xml
 
       - name: Build Dylib
         run: |
           export THEOS=~/theos
           make FINALPACKAGE=1
-          # توقيع الملف بصلاحيات الـ entitlements
+          # توقيع وتجهيز الملف للتحميل
           find .theos/obj -name "*.dylib" -exec ldid -Sent.xml {} \;
-          # استخراج الملف للمجلد الرئيسي للتحميل
           find .theos/obj -name "*.dylib" -exec cp {} . \;
 
       - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
-          name: Mohammed_Pro_Fixed
+          name: Mohammed_Final_Dylib
           path: "./*.dylib"

@@ -24,12 +24,11 @@ jobs:
       - name: Build Dylib
         run: |
           export THEOS=~/theos
-          # نستخدم make فقط لصنع الـ dylib بدون تجميع الحزمة الكاملة
           make FINALPACKAGE=1
           
       - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
           name: Mohammed_Dylib
-          # هنا بنغير المسار عشان يسحب ملف الـ dylib اللي تصنع في مجلد الـ obj
-          path: .theos/obj/debug/*.dylib
+          # التعديل هنا: خليه يبحث في كل مكان عن ملف dylib
+          path: "**/*.dylib"
